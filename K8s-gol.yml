@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mydepolymentname
+  labels:
+    app: gameoflife
+spec:
+  minReadySeconds: 10
+  replicas: 3
+  selector:
+    matchLabels:
+      app: gameoflife
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: gameoflife
+    spec:
+      containers:
+        - name: gameoflife
+          image: mtajdarhussain/myfile:1.2
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gameoflife
+spec:
+  selector:
+    app: gameoflife
+  ports:
+    - name: myserver
+      port: 8088
+      targetPort: 8080
+  type: LoadBalancer
